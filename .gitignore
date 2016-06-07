@@ -60,3 +60,11 @@ target/
 
 #Ipython Notebook
 .ipynb_checkpoints
+
+
+# mac
+.DS_Store
+
+test.py
+testFillZero_fea.bin
+trainFillZero_fea.bin
