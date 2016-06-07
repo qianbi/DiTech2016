@@ -16,7 +16,6 @@ from sklearn.linear_model import LinearRegression
 from sklearn.linear_model import RandomizedLasso
 from sklearn.linear_model import SGDRegressor
 from sklearn.tree import DecisionTreeRegressor
-from sklearn.ensemble import AdaBoostRegressor
 from sklearn.ensemble import BaggingRegressor
 from sklearn.ensemble import ExtraTreesRegressor
 from sklearn.ensemble import GradientBoostingRegressor
@@ -53,62 +52,27 @@ def PostProcess(file, data):
 
             fout.write(dist+','+date+','+str(value)+'\n')
 
+
+from estimator.decision_tree_regressor import estimators
+estimator_name = 'decision_tree_regressor'
+# from estimator.ada_boost_regressor import estimators
+# estimator_name = 'ada_boost_regressor'
+
+
 # path definition
 BASE_DIR    = os.getcwd() # os.path.dirname(os.path.abspath(__file__))
 train_path  = os.path.join(BASE_DIR, 'trainFillZero_fea.bin')
 test_path   = os.path.join(BASE_DIR, 'testFillZero_fea.bin')
 test_txt    = os.path.join(BASE_DIR, 'testFillZero.txt')
 
-scoredir = os.path.join(BASE_DIR, 'output/{0}'.format(time.strftime('%Y%m%d-%H%M%S')))
-if not os.path.exists(scoredir):
-    os.makedirs(scoredir)
-    
-scorefmt = os.path.join(scoredir, 'score_{0}.txt')
-log_filepath  = os.path.join(scoredir, 'score.log')
+output_dir = os.path.join(BASE_DIR, 'output/{0}/{1}'.format(estimator_name, time.strftime('%Y%m%d-%H%M%S')))
+if not os.path.exists(output_dir):
+    os.makedirs(output_dir)
 
-params = {'n_estimators': 10, 'max_depth': 4, 'min_samples_split': 1, 'learning_rate': 0.01, 'loss': 'ls'}
+scorefmt = os.path.join(output_dir, 'score_{0}.txt')
+log_filepath  = os.path.join(output_dir, 'score.log')
 
-# estimators = [
-    # ("LinearRegression", LinearRegression(normalize=True)),
 
-    # 0.72
-    # ("AdaBoost1", AdaBoostRegressor(DecisionTreeRegressor(max_depth=5), n_estimators=5, random_state=rng)),
-    # 0.66
-    # ("AdaBoost2", AdaBoostRegressor(DecisionTreeRegressor(max_depth=5), n_estimators=8, random_state=rng)),
-    # 0.71
-    # ("AdaBoost3", AdaBoostRegressor(DecisionTreeRegressor(max_depth=4), n_estimators=8, random_state=rng)),
-    # 0.70
-    # ("AdaBoost4", AdaBoostRegressor(DecisionTreeRegressor(max_depth=5), n_estimators=10, random_state=rng)),
-    # 0.72
-    # ("AdaBoost5", AdaBoostRegressor(DecisionTreeRegressor(max_depth=7), n_estimators=8, random_state=rng)),
-
-    # 0.71
-    # ("Bagging1", BaggingRegressor(DecisionTreeRegressor())),
-    # 0.64
-    # ("Bagging2", BaggingRegressor(DecisionTreeRegressor(max_depth=5))),
-    # 0.68
-    # ("Bagging3", BaggingRegressor(DecisionTreeRegressor(max_depth=7))),
-    # 0.66
-    # ("Bagging4", BaggingRegressor(DecisionTreeRegressor(max_depth=10))),
-
-    # ("ExtraTree1", ExtraTreesRegressor(20)),
-    # ("ExtraTree2", ExtraTreesRegressor(10)),
-    # ("ExtraTree3", ExtraTreesRegressor(30)),
-
-    # ("RandomizedLasso", RandomizedLasso(random_state=42))
-    # ("GradientBoostRegression", GradientBoostingRegressor(**params)),
-
-    # 0.75
-    # ("RandomForest1",RandomForestRegressor(bootstrap=True, criterion='mse', max_depth=None, max_features='auto', max_leaf_nodes=None, min_samples_leaf=1, min_samples_split=2, min_weight_fraction_leaf=0.0, n_estimators=5, n_jobs=1, oob_score=False, random_state=None, verbose=0, warm_start=False)),
-    # 0.72
-    # ("RandomForest2",RandomForestRegressor(bootstrap=True, criterion='mse', max_depth=None, max_features='auto', max_leaf_nodes=None, min_samples_leaf=1, min_samples_split=2, min_weight_fraction_leaf=0.0, n_estimators=8, n_jobs=1, oob_score=False, random_state=None, verbose=0, warm_start=False)),
-    # 0.71
-    # ("RandomForest3",RandomForestRegressor(bootstrap=True, criterion='mse', max_depth=None, max_features='auto', max_leaf_nodes=None, min_samples_leaf=1, min_samples_split=2, min_weight_fraction_leaf=0.0, n_estimators=10, n_jobs=1, oob_score=False, random_state=None, verbose=0, warm_start=False)),
-
-    # ("SGDRegressor",SGDRegressor(penalty='elasticnet', alpha=0.01, l1_ratio=0.25, fit_intercept=True))
-# ]
-
-from estimator import estimators
 
 if __name__ == "__main__":
     with open(log_filepath, 'w') as fout:
@@ -133,15 +97,15 @@ if __name__ == "__main__":
         X_tr, X_tt, y_tr, y_tt = cross_validation.train_test_split(X, y, test_size=0.33, random_state=42)
 
         idx = 0
-        minerror = sys.maxint
+        min_error = sys.maxint
 
         for n, (name, estimator) in enumerate(estimators):
             start_time = time.time()
             estimator.fit(X_tr, y_tr)
             error = mape(estimator.predict(X_tt), y_tt)
             elapsed_time = time.time() - start_time
-            if error < minerror:
-                minerror
+            if error < min_error:
+                min_error = error
                 idx = n
 
             print name.format(round(error, 5), elapsed_time)
@@ -154,8 +118,5 @@ if __name__ == "__main__":
     np.savetxt(scorefmt.format(idx), testresult, fmt='%.2f')
 
     PostProcess(scorefmt.format(idx), test_txt)
-        
-        
-        
-        
+
 
