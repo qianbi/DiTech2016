@@ -9,17 +9,9 @@ import sys
 import os
 import time
 import numpy as np
-from sklearn import preprocessing
 from sklearn.svm import SVR
-from sklearn import metrics, cross_validation
-from sklearn.linear_model import LinearRegression
-from sklearn.linear_model import RandomizedLasso
-from sklearn.linear_model import SGDRegressor
-from sklearn.tree import DecisionTreeRegressor
-from sklearn.ensemble import BaggingRegressor
-
-from sklearn.ensemble import GradientBoostingRegressor
-from sklearn.ensemble import RandomForestRegressor
+from sklearn import cross_validation
+from sklearn import preprocessing, metrics
 
 import math
 from itertools import izip
@@ -56,12 +48,14 @@ def PostProcess(file, data):
 # estimator_name = 'decision_tree_regressor'
 # from estimator.ada_boost_regressor import estimators
 # estimator_name = 'ada_boost_regressor'
-from estimator.extra_trees_regressor import estimators
-estimator_name = 'extra_trees_regressor'
+# from estimator.extra_trees_regressor import estimators
+# estimator_name = 'extra_trees_regressor'
 # from estimator.bagging_regressor import estimators
 # estimator_name = 'bagging_regressor'
-
-
+# from estimator.randomized_lasso import estimators
+# estimator_name = 'randomized_lasso'
+from estimator.gradient_boosting_regressor import estimators
+estimator_name = 'gradient_boosting_regressor'
 
 
 
