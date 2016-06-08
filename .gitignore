@@ -65,6 +65,7 @@ target/
 # mac
 .DS_Store
 
+output/
 test.py
 testFillZero_fea.bin
 trainFillZero_fea.bin

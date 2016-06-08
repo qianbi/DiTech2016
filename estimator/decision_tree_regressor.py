@@ -6,8 +6,10 @@ index = 0
 for max_depth in [5]:
     for max_feature in ['auto', None]:
         for min_samples_split in xrange(2, 11):
-            for min_samples_leaf in xrange(2, 11):
-                for min_weight_fraction_leaf in [x * 0.01 for x in xrange(10)]:
+            # for min_samples_leaf in xrange(2, 11):
+            for min_samples_leaf in xrange(3, 4):
+                # for min_weight_fraction_leaf in [x * 0.01 for x in xrange(10)]:
+                for min_weight_fraction_leaf in [0]:
                     for max_leaf_nodes in [None]:
                         for random_state in [None]:
                             params = {

@@ -17,7 +17,7 @@ from sklearn.linear_model import RandomizedLasso
 from sklearn.linear_model import SGDRegressor
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.ensemble import BaggingRegressor
-from sklearn.ensemble import ExtraTreesRegressor
+
 from sklearn.ensemble import GradientBoostingRegressor
 from sklearn.ensemble import RandomForestRegressor
 
@@ -31,7 +31,6 @@ def mape(ypred, ytrue):
     """ returns the mean absolute percentage error """
     idx = ytrue != 0.0
     return np.mean(np.abs(ypred[idx] - ytrue[idx]) / ytrue[idx])
-
 
 def PostProcess(file, data):
     fa = open(file)
@@ -53,10 +52,17 @@ def PostProcess(file, data):
             fout.write(dist+','+date+','+str(value)+'\n')
 
 
-from estimator.decision_tree_regressor import estimators
-estimator_name = 'decision_tree_regressor'
+# from estimator.decision_tree_regressor import estimators
+# estimator_name = 'decision_tree_regressor'
 # from estimator.ada_boost_regressor import estimators
 # estimator_name = 'ada_boost_regressor'
+from estimator.extra_trees_regressor import estimators
+estimator_name = 'extra_trees_regressor'
+# from estimator.bagging_regressor import estimators
+# estimator_name = 'bagging_regressor'
+
+
+
 
 
 # path definition
@@ -69,9 +75,8 @@ output_dir = os.path.join(BASE_DIR, 'output/{0}/{1}'.format(estimator_name, time
 if not os.path.exists(output_dir):
     os.makedirs(output_dir)
 
-scorefmt = os.path.join(output_dir, 'score_{0}.txt')
+scorefmt = os.path.join(output_dir, 'score_{0}_{1}.txt')
 log_filepath  = os.path.join(output_dir, 'score.log')
-
 
 
 if __name__ == "__main__":
@@ -115,8 +120,8 @@ if __name__ == "__main__":
     estimator = estimators[idx][1]
     estimator.fit(X, y)
     testresult = estimator.predict(test_data)
-    np.savetxt(scorefmt.format(idx), testresult, fmt='%.2f')
+    np.savetxt(scorefmt.format(idx, round(min_error, 5)), testresult, fmt='%.2f')
 
-    PostProcess(scorefmt.format(idx), test_txt)
+    PostProcess(scorefmt.format(idx, round(min_error, 5)), test_txt)
 
 

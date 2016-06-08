@@ -1,23 +1,11 @@
 # -*- coding: utf-8 -*-
 
 
-
-params = {'n_estimators': 10, 'max_depth': 4, 'min_samples_split': 1, 'learning_rate': 0.01, 'loss': 'ls'}
+# params = {'n_estimators': 10, 'max_depth': 4, 'min_samples_split': 1, 'learning_rate': 0.01, 'loss': 'ls'}
 
 # estimators = [
     # ("LinearRegression", LinearRegression(normalize=True)),
-    # 0.71
-    # ("Bagging1", BaggingRegressor(DecisionTreeRegressor())),
-    # 0.64
-    # ("Bagging2", BaggingRegressor(DecisionTreeRegressor(max_depth=5))),
-    # 0.68
-    # ("Bagging3", BaggingRegressor(DecisionTreeRegressor(max_depth=7))),
-    # 0.66
-    # ("Bagging4", BaggingRegressor(DecisionTreeRegressor(max_depth=10))),
 
-    # ("ExtraTree1", ExtraTreesRegressor(20)),
-    # ("ExtraTree2", ExtraTreesRegressor(10)),
-    # ("ExtraTree3", ExtraTreesRegressor(30)),
 
     # ("RandomizedLasso", RandomizedLasso(random_state=42))
     # ("GradientBoostRegression", GradientBoostingRegressor(**params)),
